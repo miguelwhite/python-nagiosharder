@@ -6,7 +6,7 @@ import re
 from parse import parse_status_html
 
 __all__ = ['Nagios']
-__version__ = '0.1'
+__version__ = '0.1.1'
 
 class Nagios:
     def __init__(self, user, password, nagios_url, version):
