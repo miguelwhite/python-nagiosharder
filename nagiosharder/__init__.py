@@ -176,7 +176,7 @@ class Nagios:
             else:
                 payload['host'] = 'all'
         query = urlencode(payload)
-        url = "%s/%s" % (self.status_url, query)
+        url = "%s?%s" % (self.status_url, query)
         print url
         response = requests.get(url, auth=(self.user, self.password), verify=False)
         if response.ok:
