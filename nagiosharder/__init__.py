@@ -157,7 +157,7 @@ class Nagios:
                     'duration' : 6,
                     'attempts' : 5}.get(options['sort_option']) or None
 
-            service_group = options.get('group')
+        service_group = options.get('group')
         payload = {
                'hoststatustype': options.get('hoststatustype') or 15,
                'servicestatustypes': options.get('servicestatustypes') or service_status_type,
@@ -177,6 +177,7 @@ class Nagios:
                 payload['host'] = 'all'
         query = urlencode(payload)
         url = "%s/%s" % (self.status_url, query)
+        print url
         response = requests.get(url, auth=(self.user, self.password), verify=False)
         if response.ok:
             return parse_status_html(response.text)
@@ -223,3 +224,4 @@ class Nagios:
 
     def _strftime(self, time):
         return datetime.strftime(self.nagios_time_format, time)
+
