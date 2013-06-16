@@ -39,6 +39,8 @@ def parse_status_html_row(time_format, row):
     if not columns or len(columns) == 1:
         return
     item['host'] = columns[0].text_content().replace('\n', '')
+    if not item['host']:
+        item['host'] = row.getprevious().getchildren()[0].text_content().replace('\n', '')
 
     links = columns[0].cssselect('td a')
     links += columns[1].cssselect('td a')
