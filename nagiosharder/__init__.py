@@ -6,7 +6,6 @@ import re
 from parse import parse_status_html
 
 __all__ = ['Nagios']
-__version__ = '0.1.1'
 
 class Nagios:
     def __init__(self, user, password, nagios_url, version):
@@ -137,13 +136,9 @@ class Nagios:
         return requests.post(self.cmd_url, auth=(self.user, self.password),
                                                     data=payload, verify=False)
 
-    def service_status(self, type, options):
-        service_status_type = {'ok': 2,
-                'warning': 4,
-                'unknown': 8,
-                'critical': 16,
-                'pending': 1,
-                'all_problems': 28}.get(type) or None
+    def service_status(self, types, options):
+        if isinstance(str, types):
+            types = [types]
         sort_type = None
         if 'sort_type' in options:
             sort_type = {'asc': 1, 'desc': 2}.get(options['sort_type']) or None
@@ -158,13 +153,17 @@ class Nagios:
                     'attempts' : 5}.get(options['sort_option']) or None
 
         service_group = options.get('group')
+        hostprops = PROPS.STATE_UNACKNOWLEDGED + PROPS.NO_SCHEDULED_DOWNTIME
+        serviceprops = PROPS.STATE_UNACKNOWLEDGED + PROPS.NO_SCHEDULED_DOWNTIME
+
         payload = {
-               'hoststatustype': options.get('hoststatustype') or 15,
-               'servicestatustypes': options.get('servicestatustypes') or service_status_type,
+               'hoststatustypes': options.get('hoststatustypes') or 15,
+               'servicestatustypes': options.get('servicestatustypes') or count_service_status_type(types),
                'sorttype': options.get('sorttype') or sort_type,
                'sortoption': options.get('sortoption') or sort_option,
                'hoststatustypes': options.get('hoststatustypes'),
-               'serviceprops': options.get('serviceprops')
+               'hostprops': options.get('hostprops') or hostprops,
+               'serviceprops': options.get('serviceprops') or serviceprops
                }
         if self.version == 3:
             payload['servicegroup'] = service_group or 'all'
@@ -175,7 +174,7 @@ class Nagios:
                 payload['style'] = 'detail'
             else:
                 payload['host'] = 'all'
-        query = urlencode(payload)
+        query = urlencode(sift_none(payload))
         url = "%s?%s" % (self.status_url, query)
         print url
         response = requests.get(url, auth=(self.user, self.password), verify=False)
@@ -225,3 +224,43 @@ class Nagios:
     def _strftime(self, time):
         return datetime.strftime(self.nagios_time_format, time)
 
+def sift_none(seq):
+    if isinstance(seq, dict):
+        return dict((k,v) for k,v in seq.items() if v)
+    else:
+        return [x for x in seq if x]
+
+
+class PROPS:
+    SCHEDULED_DOWNTIME = 1
+    NO_SCHEDULED_DOWNTIME = 2
+    STATE_ACKNOWLEDGED = 4
+    STATE_UNACKNOWLEDGED = 8
+    CHECKS_DISABLED = 16
+    CHECKS_ENABLED = 32
+    EVENT_HANDLER_DISABLED = 64
+    EVENT_HANDLER_ENABLED = 128
+    FLAP_DETECTION_DISABLED = 256
+    FLAP_DETECTION_ENABLED = 512
+    IS_FLAPPING = 1024
+    IS_NOT_FLAPPING = 2048
+    NOTIFICATIONS_DISABLED = 4096
+    NOTIFICATIONS_ENABLED = 8192
+    PASSIVE_CHECKS_DISABLED = 16384
+    PASSIVE_CHECKS_ENABLED = 32768
+    PASSIVE_CHECK = 65536
+    ACTIVE_CHECK = 131072
+    HARD_STATE = 262144
+    SOFT_STATE = 524288
+
+def count_service_status_type(types):
+    res = []
+    for type in types:
+        service_status_type = {'ok': 2,
+                'warning': 4,
+                'unknown': 8,
+                'critical': 16,
+                'pending': 1,
+                'all_problems': 28}.get(type) or 0
+        res.append(service_status_type)
+    return sum(res)

@@ -7,6 +7,9 @@ log = Logger('parse')
 
 # TODO:
 # add down parsing
+# cgi params explained
+# http://docs.icinga.org/latest/en/cgiparams.html
+# http://roshamboot.org/main/guide-nagios-statuscgi/
 
 def parse_status_html(nagios_status_html_str):
     rows = Html(nagios_status_html_str).cssselect('table.status > tr')

@@ -2,7 +2,6 @@
 
 import os
 import sys
-import nagiosharder
 
 try:
     from setuptools import setup
@@ -31,7 +30,7 @@ requires = [
 
 setup(
     name='nagiosharder',
-    version=nagiosharder.__version__,
+    version='0.2'
     description='lib and cli interface to nagios status.cgi',
     long_description=open('README.txt').read(),
     author='Alexandr Skurikhin',
