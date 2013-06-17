@@ -42,8 +42,15 @@ def parse_status_html_row(time_format, row):
     if not columns or len(columns) == 1:
         return
     item['host'] = columns[0].text_content().replace('\n', '')
+    def _find_host_name(node):
+        hostname = node.getprevious().getchildren()[0].text_content().replace('\n', '')
+        while not hostname:
+            node = node.getprevious()
+            hostname = node.getprevious().getchildren()[0].text_content().replace('\n', '')
+        return hostname
+
     if not item['host']:
-        item['host'] = row.getprevious().getchildren()[0].text_content().replace('\n', '')
+        item['host'] = _find_host_name(row)
 
     links = columns[0].cssselect('td a')
     links += columns[1].cssselect('td a')
