@@ -137,7 +137,7 @@ class Nagios:
                                                     data=payload, verify=False)
 
     def service_status(self, types, options):
-        if isinstance(str, types):
+        if isinstance(types, str) or isinstance(types, unicode):
             types = [types]
         sort_type = None
         if 'sort_type' in options:
@@ -176,7 +176,6 @@ class Nagios:
                 payload['host'] = 'all'
         query = urlencode(sift_none(payload))
         url = "%s?%s" % (self.status_url, query)
-        print url
         response = requests.get(url, auth=(self.user, self.password), verify=False)
         if response.ok:
             return parse_status_html(response.text)
