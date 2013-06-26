@@ -28,7 +28,7 @@ class Nagios:
     def extinfo_url(self):
         return self.nagios_url + '/extinfo.cgi'
 
-    def acknowledge_service(self, host, service, comment):
+    def acknowledge_service(self, host, service, comment, persistent=False):
         payload = {
                 'cmd_typ' : 34,
                 'cmd_mod' : 2,
@@ -37,9 +37,10 @@ class Nagios:
                 'host' : host,
                 'service' : service,
                 'send_notification' : True,
-                'persistent' : False,
                 'sticky_ack' : True
                 }
+        if persistent:
+            payload['persistent'] = True
         return requests.post(self.cmd_url, auth=(self.user, self.password),
                                                     data=payload, verify=False)
 
