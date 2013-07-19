@@ -25,12 +25,13 @@ requires = [
     'requests >= 0.13.3',
     'iniparse >= 0.4',
     'prettytable >= 0.6.1',
-    'lxml==3.2.1'
+    'lxml==3.2.1',
+    'cssselect==0.8'
 ]
 
 setup(
     name='nagiosharder',
-    version='0.2.4',
+    version='0.2.5',
     description='lib and cli interface to nagios status.cgi',
     long_description=open('README.txt').read(),
     author='Alexandr Skurikhin',
