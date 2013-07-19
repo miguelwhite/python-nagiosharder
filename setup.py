@@ -21,16 +21,16 @@ packages = [
 
 
 requires = [
-    'urwid >= 1.1.0',
     'Logbook >= 0.4',
     'requests >= 0.13.3',
     'iniparse >= 0.4',
-    'prettytable >= 0.6.1'
+    'prettytable >= 0.6.1',
+    'lxml==3.2.1'
 ]
 
 setup(
     name='nagiosharder',
-    version='0.2.3',
+    version='0.2.4',
     description='lib and cli interface to nagios status.cgi',
     long_description=open('README.txt').read(),
     author='Alexandr Skurikhin',
