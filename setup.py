@@ -33,7 +33,7 @@ setup(
     name='nagiosharder',
     version='0.2.5',
     description='lib and cli interface to nagios status.cgi',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     author='Alexandr Skurikhin',
     author_email='a@skurih.in',
     url='https://github.com/a-sk/nagiosharder',
