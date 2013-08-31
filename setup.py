@@ -36,7 +36,7 @@ setup(
     long_description=open('README.txt').read(),
     author='Alexandr Skurikhin',
     author_email='a@skurih.in',
-    url='git://skurih.in/nagios-harder.git',
+    url='https://github.com/a-sk/nagiosharder',
     scripts=['bin/nagiosharder'],
     packages=packages,
     package_data={'': ['LICENSE'] },
