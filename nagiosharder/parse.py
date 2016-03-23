@@ -13,7 +13,7 @@ log = Logger('parse')
 
 def parse_status_html(nagios_status_html_str):
     rows = Html(nagios_status_html_str).cssselect('table.status > tr')
-    time_format = '%d-%m-%Y %H:%M:%S'
+    time_format = '%m-%d-%Y %H:%M:%S'
     for row in rows[1:]:
         res =  parse_status_html_row(time_format, row)
         if res:
