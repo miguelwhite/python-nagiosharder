@@ -179,7 +179,7 @@ class Nagios:
         url = "%s?%s" % (self.status_url, query)
         response = requests.get(url, auth=(self.user, self.password), verify=False)
         if response.ok:
-            return parse_status_html(response.text)
+            return parse_status_html(response.text, self.nagios_time_format)
 
     def host_status(self, host):
         host_status_url = "%s?host=%s" % (self.status_url, host)
@@ -187,7 +187,7 @@ class Nagios:
 
         if response.ok:
             services = {}
-            for status in parse_status_html(response.text):
+            for status in parse_status_html(response.text, self.nagios_time_format):
                 services[status['service']] = status
             return services
 

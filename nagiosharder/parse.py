@@ -11,9 +11,8 @@ log = Logger('parse')
 # http://docs.icinga.org/latest/en/cgiparams.html
 # http://roshamboot.org/main/guide-nagios-statuscgi/
 
-def parse_status_html(nagios_status_html_str):
+def parse_status_html(nagios_status_html_str, time_format = '%m-%d-%Y %H:%M:%S'):
     rows = Html(nagios_status_html_str).cssselect('table.status > tr')
-    time_format = '%m-%d-%Y %H:%M:%S'
     for row in rows[1:]:
         res =  parse_status_html_row(time_format, row)
         if res:
